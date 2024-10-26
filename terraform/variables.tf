@@ -32,7 +32,7 @@ variable "cluster_name" {
 variable "subnet_ids" {
   description = "IDs des sous-réseaux"
   type        = list(string)
-  default     = ["subnet-0a0e900d931b29662", "subnet-0624d0c138569de2b"]  # Valeurs par défaut
+  default     = ["subnet-07884ab69d3a17148", "subnet-0785a7ff7c7cd4e01"]  # Valeurs par défaut
 }
 
 variable "role_arn" {
@@ -44,7 +44,7 @@ variable "role_arn" {
 variable "vpc_id" {
   description = "L'ID du VPC pour le cluster EKS"
   type        = string
-  default     = "vpc-0de9a89ffaea90057"  # Remplacez par votre ID de VPC réel
+  default     = "vpc-0cd469ebefbddf4c5"  # Remplacez par votre ID de VPC réel
 }
 
 variable "vpc_cidr" {
