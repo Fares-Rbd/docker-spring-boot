@@ -88,6 +88,9 @@ resource "aws_eks_node_group" "my_node_group" {
   node_role_arn   = var.role_arn
   subnet_ids      = var.subnet_ids
 
+  // Attach the worker security group
+  node_group_sg_ids = [aws_security_group.eks_worker_sg.id]
+
   scaling_config {
     desired_size = 2
     max_size     = 3
