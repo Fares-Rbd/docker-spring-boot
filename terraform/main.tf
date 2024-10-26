@@ -4,7 +4,6 @@ provider "aws" {
   secret_key = var.aws_secret_key
   token      = var.aws_session_token
 }
-
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr  # Utilisation de la variable pour le CIDR
 }
@@ -12,7 +11,21 @@ resource "aws_vpc" "my_vpc" {
 resource "aws_security_group" "eks_cluster_sg" {
   name        = "eks-cluster-sg-${var.cluster_name}"
   description = "Security group for EKS cluster ${var.cluster_name}"
-  vpc_id      = aws_vpc.my_vpc.id  # Utilisation de la variable pour l'ID du VPC
+  vpc_id      = var.vpc_id  # Utilisation de la variable pour l'ID du VPC
+
+  ingress {
+    from_port   = 8083
+    to_port     = 8083
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 30000
+    to_port     = 30000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   egress {
     from_port   = 0
@@ -29,13 +42,20 @@ resource "aws_security_group" "eks_cluster_sg" {
 resource "aws_security_group" "eks_worker_sg" {
   name        = "eks-worker-sg-${var.cluster_name}"
   description = "Security group for EKS worker nodes ${var.cluster_name}"
-  vpc_id      = aws_vpc.my_vpc.id  # Utilisation de la variable pour l'ID du VPC
+  vpc_id      = var.vpc_id  # Utilisation de la variable pour l'ID du VPC
+
+  ingress {
+    from_port   = 8083
+    to_port     = 8083
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     from_port   = 30000
     to_port     = 30000
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Allow external access to NodePort
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -72,7 +92,4 @@ resource "aws_eks_node_group" "my_node_group" {
     max_size     = 3
     min_size     = 1
   }
-
-  # Attach the worker security group
-  depends_on = [aws_eks_cluster.my_cluster]
 }
