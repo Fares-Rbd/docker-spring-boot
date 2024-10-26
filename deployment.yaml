@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-spring-boot-app
+  labels:
+    app: my-spring-boot-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-spring-boot-app
+  template:
+    metadata:
+      labels:
+        app: my-spring-boot-app
+    spec:
+      containers:
+      - name: my-spring-boot-app
+        image: thourayalouati/docker-spring-boot:latest  # Assurez-vous que le nom est correct
+        ports:
+        - containerPort: 8083  # Utilisez le port sur lequel votre application écoute
